@@ -1,0 +1,23 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "padded-blocks": ["error", { blocks: "never", classes: "never", switches: "never" }],
+    "padding-line-between-statements": ["error",
+      { blankLine: "always", prev: "*", next: "return" },
+      { blankLine: "always", prev: ["let", "const", "var"], next: "*"},
+      { blankLine: "any", prev: ["let", "const", "var"], next: ["let", "const", "var"]},
+      { blankLine: "always", prev: "multiline-block-like", next: "*"}
+    ],
+    "no-multiple-empty-lines": "error",
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"]
+  }
+}
