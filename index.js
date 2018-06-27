@@ -34,11 +34,9 @@ let get = require('./get'),
     url = require('url');
 
 require('http').createServer(function(req, res) {
-  let pathname = decodeURI(url.parse(req.url).pathname);
-
   switch(req.method) {
     case 'GET':
-      get(pathname, res);
+      get(url.parse(req.url).pathname, res);
       break;
 
     default:
