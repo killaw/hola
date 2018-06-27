@@ -30,7 +30,8 @@
     if (!form.file.value) return;
 
     //  /my/path/file.ext -> /file.ext
-    const fileUrl = '/' + form.file.value.replace(/.*[\\\/]/, '');
+    // const fileUrl = '/' + form.file.value.replace(/.*[\\\/]/, '');
+    const fileUrl = form.file.value;
 
     const xhr = new XMLHttpRequest();
 
