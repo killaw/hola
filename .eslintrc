@@ -17,6 +17,7 @@
       { blankLine: "always", prev: "multiline-block-like", next: "*"}
     ],
     "no-multiple-empty-lines": "error",
+    "no-case-declarations": "off",
     "semi": ["error", "always"],
     "quotes": ["error", "single"]
   }
