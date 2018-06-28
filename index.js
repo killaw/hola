@@ -32,6 +32,7 @@
 
 let get = require('./get'),
     post = require('./post'),
+    del = require('./delete'),
     url = require('url'),
     path = require('path'),
     fs = require('fs');
@@ -44,6 +45,10 @@ require('http').createServer(function(req, res) {
 
     case 'POST':
       post(url.parse(req.url).pathname, req, res);
+      break;
+
+    case 'DELETE':
+      del(url.parse(req.url).pathname, res);
       break;
 
     default:
