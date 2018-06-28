@@ -1,11 +1,6 @@
-const path = require('path'),
-      fs = require('fs');
+const fs = require('fs');
 
-const del = function (pathname, res) {
-  let filename = decodeURIComponent(pathname);
-
-  filename = path.normalize(path.join(__dirname, 'public', 'files', filename));
-
+const del = function (filename, res) {
   fs.stat(filename, (err, stats) => {
     if (err && err.code === 'ENOENT') {
       res.statusCode = 404;

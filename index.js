@@ -30,25 +30,36 @@
 
 'use strict';
 
-let get = require('./get'),
-    post = require('./post'),
-    del = require('./delete'),
-    url = require('url'),
-    path = require('path'),
-    fs = require('fs');
+const normalizeRequest = require('./normalize-request'),
+      del = require('./delete'),
+      post = require('./post'),
+      get = require('./get'),
+      url = require('url');
 
 require('http').createServer(function(req, res) {
   switch(req.method) {
     case 'GET':
-      get(url.parse(req.url).pathname, res);
+      normalizeRequest(
+        url.parse(req.url).pathname,
+        res,
+        (pathname) => get(pathname, res)
+      );
       break;
 
     case 'POST':
-      post(url.parse(req.url).pathname, req, res);
+      normalizeRequest(
+        url.parse(req.url).pathname,
+        res,
+        (pathname) => post(pathname, req, res)
+      );
       break;
 
     case 'DELETE':
-      del(url.parse(req.url).pathname, res);
+      normalizeRequest(
+        url.parse(req.url).pathname,
+        res,
+        (pathname) => del(pathname, res)
+      );
       break;
 
     default:

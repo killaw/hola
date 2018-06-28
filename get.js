@@ -1,50 +1,10 @@
 const path = require('path'),
       fs = require('fs');
-const rootFolder = path.join(__dirname, '/public');
+const rootFolder = path.join(__dirname, '/public/');
 
 const get = function (pathname, res) {
-  /*
-    Декодирование url. Если decodeURIComponent не сможет его декодировать, то
-    это значит, что он закодирован неверно. Поэтому вернем 400 Bad request
-  */
-  try {
-    pathname = decodeURIComponent(pathname);
-  } catch (e) {
-    res.statusCode = 400;
-
-    return res.end('Bad request');
-  }
-
-  /*
-    Проверка на нулевой байт. Его не должно быть в запросе. Если есть - значит
-    его кто-то передал намерено. Есть функции Node.js, который будут работать
-    с ним чуть-чуть не корректно
-  */
-  if (~pathname.indexOf('\0')) {
-    res.statusCode = 400;
-
-    return res.end('Bad request');
-  }
-
-  if (pathname == '/')
-    pathname = '/index.html';
-
-  /*
-    path.normalize убирает из пути различные . .. /\
-    path.join прилепляет к пути рутовую директорию для файлов, чтобы node дальше
-    знал абсолютный путь к запрашиваемому файлу
-  */
-  pathname = path.normalize(path.join(rootFolder, pathname));
-
-  /*
-    На мой взгляд это дополнительная проверка, что действительно в pathname в начале
-    стоит пусть к rootFolder
-  */
-  if (pathname.indexOf(rootFolder) != 0) {
-    res.statusCode = 404;
-
-    return res.end('File not found');
-  }
+  if (pathname == rootFolder)
+    pathname = path.join(pathname, '/index.html');
 
   const sendFile = function () {
     let stream = fs.createReadStream(pathname);

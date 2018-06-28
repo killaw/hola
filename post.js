@@ -2,7 +2,7 @@ let path = require('path'),
     url = require('url'),
     fs = require('fs');
 
-const post = function (pathname, req, res) {
+const post = function (filename, req, res) {
   if (req.headers['content-length'] >= 1048576) {
     res.statusCode = 413;
     res.end('File too big');
@@ -10,7 +10,7 @@ const post = function (pathname, req, res) {
     return;
   }
 
-  let filename = path.join(__dirname, 'public', 'files', decodeURIComponent(url.parse(req.url).pathname));
+  // let filename = path.join(__dirname, 'public', 'files', decodeURIComponent(url.parse(req.url).pathname));
 
   fs.stat(filename, (err) => {
     if (err && err.code !== 'ENOENT') {
