@@ -1,6 +1,4 @@
-let path = require('path'),
-    url = require('url'),
-    fs = require('fs');
+let fs = require('fs');
 
 const post = function (filename, req, res) {
   if (req.headers['content-length'] >= 1048576) {
@@ -9,8 +7,6 @@ const post = function (filename, req, res) {
 
     return;
   }
-
-  // let filename = path.join(__dirname, 'public', 'files', decodeURIComponent(url.parse(req.url).pathname));
 
   fs.stat(filename, (err) => {
     if (err && err.code !== 'ENOENT') {
