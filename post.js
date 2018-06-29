@@ -46,17 +46,42 @@ const post = function (filename, req, res) {
     }
   };
 
-  stream.on('error', (err) => {
-    if (err.code === 'EEXIST') {
-      res.statusCode = 409;
-      res.end('Alredy exists');
-    } else {
-      res.statusCode = 500;
-      res.end('Server error');
-    }
+  stream
+    .on('error', (err) => {
+      if (err.code === 'EEXIST') {
+        res.statusCode = 409;
+        res.end('Alredy exists');
+      } else {
+        /*
+          Дело в том, что протокол http отсылает заголовки отдельно от тела, поэтому
+          (видимо чтобы избежать ошибки) можно проверить свойство headersSent. Почему
+          тут может быть ситуация, когда заголовки уже отправлены, я не знаю
+        */
+        if (!res.headersSent) {
+          res.writeHead(500, {'Connection': 'close'});
+          res.write('Server error');
+        }
+      }
 
-    console.error(err);
-  });
+      fs.unlink(filename, (err) => {
+        if (err)
+          console.error(err);
+        res.end();
+      });
+      console.error(err);
+    })
+    .on('close', () => {
+      // Note: can't use on('finish')
+      // finish = data flushed, for zero files happens immediately,
+      // even before 'file exists' check
+
+      // for zero files the event sequence may be:
+      //   finish -> error
+
+      // we must use 'close' event to track if the file has really been written down
+      res.statusCode = 200;
+      res.end('Upload completed');
+    });
 
 
   req
@@ -71,10 +96,10 @@ const post = function (filename, req, res) {
         });
       // });
     })
-    .on('end', () => {
-      res.statusCode = 200;
-      res.end('Upload completed');
-    })
+    // .on('end', () => {
+    //   res.statusCode = 200;
+    //   res.end('Upload completed');
+    // })
     .pipe(stream); // здесь уже вернется WriteStream, т.е. не объект req
 };
 
