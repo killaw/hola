@@ -32,31 +32,43 @@ const get = function (pathname, res) {
     Не смотря на то, что всякие проверки на существование файла были проведены ранее,
     обработку error нужно реализовать, т.к. могут быть проблемы и во время чтения файла
   */
-  stream.on('error', (err) => {
-    if (err.code === 'ENOENT') {
-      res.statusCode = 404;
-      res.end('File not found');
-      console.error(err);
-    } else {
-      res.statusCode = 500;
-      res.end('Server error');
-      console.error(err);
-    }
-  });
+  stream
+    .on('error', (err) => {
+      if (err.code === 'ENOENT') {
+        res.statusCode = 404;
+        res.end('File not found');
+      } else {
+        if (!res.headersSent) {
+          res.setHeader('Content-Type', 'text/html');
+          res.statusCode = 500;
+          res.end('Server error');
+        } else {
+          res.end();
+        }
+      }
 
-  stream.on('open', () => {
-    /*
-      Событие close у response нужно отлавливать, чтобы принудительно уничтожать поток,
-      т.к. close - событие разрыва соединения (finish - правильное завершение соединения).
-      В случае разрыва соединения, у потока не наступит ни событие end, ни событие close,
-      соответственно не будут освобождены ресурсы и файл, открытый потоком также останется
-      в памяти
-    */
-    res.on('close', () => stream.destroy());
-    res.writeHead(200, { 'Content-Type': `${mimeTypes[path.extname(pathname)] || 'application/octet-stream'}; chastreamet=utf-8`, });
-    stream.pipe(res);
-  });
-
+      console.error(err);
+    })
+    .on('open', () => {
+      /*
+        Событие open происходит до события error (в случае если открытие завершается ошибкой)
+      */
+      /*
+        метод writeHead как раз отправит заголовки, а не просто их устновит. И после него
+        параметр res.headersSent будет true
+      */
+      // res.writeHead(200, { 'Content-Type': `${mimeTypes[path.extname(pathname)] || 'application/octet-stream'}; chastreamet=utf-8`, });
+      res.setHeader('Content-Type', `${mimeTypes[path.extname(pathname)] || 'application/octet-stream'}; chastreamet=utf-8`);
+    })
+    .pipe(res);
+  /*
+    Событие close у response нужно отлавливать, чтобы принудительно уничтожать поток,
+    т.к. close - событие разрыва соединения (finish - правильное завершение соединения).
+    В случае разрыва соединения, у потока не наступит ни событие end, ни событие close,
+    соответственно не будут освобождены ресурсы и файл, открытый потоком также останется
+    в памяти
+  */
+  res.on('close', () => stream.destroy());
   /*
     Данная конструкция делает похожие на stream.pipe(res) действия:
     при заполнении буфера res, res.write вернет false;
