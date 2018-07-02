@@ -61,14 +61,13 @@ const post = function (filename, req, res) {
           res.writeHead(500, {'Connection': 'close'});
           res.write('Server error');
         }
+        
+        fs.unlink(filename, (err) => {
+          if (err)
+            console.error(err);
+          res.end();
+        });
       }
-
-      fs.unlink(filename, (err) => {
-        if (err)
-          console.error(err);
-        res.end();
-      });
-      console.error(err);
     })
     .on('close', () => {
       // Note: can't use on('finish')
