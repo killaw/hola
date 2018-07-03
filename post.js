@@ -23,11 +23,11 @@ const post = function (filename, req, res) {
         // this header tells node to close the connection
         // also see http://stackoverflow.com/questions/18367824/how-to-cancel-http-upload-from-data-events/18370751#18370751
       */
-      if (!res.headersSent) {
+      // if (!res.headersSent) {
         res.setHeader('Connection', 'close');
         res.statusCode = 413;
         res.end('File is too big');
-      }
+      // }
       // req.removeListener('data', writeFile);
 
       /*
@@ -45,6 +45,7 @@ const post = function (filename, req, res) {
             console.error(err);
         });
       // });
+      req.removeListener('data', writeFile);
     }
   };
 
