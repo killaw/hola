@@ -46,7 +46,7 @@ module.exports = http.createServer(function(req, res) {
         (pathname) => get(pathname, res)
       );
       break;
-
+/*
     case 'POST':
       normalizeRequest(
         url.parse(req.url).pathname,
@@ -62,7 +62,7 @@ module.exports = http.createServer(function(req, res) {
         (pathname) => del(pathname, res)
       );
       break;
-
+*/
     default:
       res.statusCode = 502;
       res.end('Not implemented');
