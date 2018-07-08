@@ -41,9 +41,8 @@ const normalizeRequest = require('./normalize-request'),
 
 module.exports = http.createServer(function(req, res) {
   for (let pattern of config.get('misc:hackers'))
-    if (~req.url.indexOf(pattern.toLowerCase())) {
-      fs.appendFile(config.get('path:log'), `Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}\r\n`, (err) => err);
-      console.log(`Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}`);
+    if (~req.url.toLowerCase().indexOf(pattern)) {
+      fs.appendFile(config.get('path:log'), `${(new Date).toLocaleString()} Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}\r\n`, (err) => err);
       res.statusCode = 404;
       res.end('File not found');
 
