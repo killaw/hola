@@ -1,3 +1,4 @@
-const server = require('./server');
+const server = require('./server'),
+      config = require('./config/index');
 
-server.listen(80);
+server.listen(config.get('app:port'));

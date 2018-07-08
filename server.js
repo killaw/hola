@@ -31,13 +31,25 @@
 'use strict';
 
 const normalizeRequest = require('./normalize-request'),
+      config = require('config'),
       del = require('./delete'),
       post = require('./post'),
+      http = require('http'),
       get = require('./get'),
       url = require('url'),
-      http = require('http');
+      fs = require('fs');
 
 module.exports = http.createServer(function(req, res) {
+  for (let pattern of config.get('misc:hackers'))
+    if (~req.url.indexOf(pattern.toLowerCase())) {
+      fs.appendFile(config.get('path:log'), `Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}\r\n`, (err) => err);
+      console.log(`Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}`);
+      res.statusCode = 404;
+      res.end('File not found');
+
+      return;
+    }
+
   switch(req.method) {
     case 'GET':
       normalizeRequest(

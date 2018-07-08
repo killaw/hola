@@ -1,9 +1,10 @@
-const path = require('path'),
+const config = require('config'),
+      path = require('path'),
       fs = require('fs');
-const rootFolder = path.join(__dirname, '/public/');
+const publicFolder = config.get('path:public'); //path.join(__dirname, '/public/');
 
 const get = function (pathname, res) {
-  if (pathname == rootFolder)
+  if (pathname == publicFolder)
     pathname = path.join(pathname, '/index.html');
 
   let stream = fs.createReadStream(pathname);

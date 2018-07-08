@@ -1,0 +1,27 @@
+{
+  "name": "halo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "$env:NODE_PATH='.'; mocha **\\*.spec.js",
+    "start": "node index.js",
+    "dev": "$env:NODE_PATH='.'; $env:NODE_ENV='DEV'; nodemon --inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/killaw/hola.git"
+  },
+  "author": "killaw",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/killaw/hola/issues"
+  },
+  "homepage": "https://github.com/killaw/hola#readme",
+  "dependencies": {
+    "nconf": "^0.10.0"
+  }
+}

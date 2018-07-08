@@ -1,0 +1,11 @@
+{
+  "app": {
+    "port": 80
+  },
+  "misc": {
+    "hackers": ["index.php"]
+  },
+  "path": {
+    "log": "/var/log/hola.log"
+  }
+}
