@@ -1,10 +1,13 @@
 {
   "app": {
-    "port": 80
+    "port": 80,
+    "key": "/etc/letsencrypt/mycert/privkey.pem",
+    "cert": "/etc/letsencrypt/mycert/fullchain.pem"
   },
   "misc": {
     "hackers": [
       ".php",
+      ".cgi",
       "/users/",
       "/xml/",
       "/biztouch/",
@@ -89,7 +92,8 @@
       "/voip/",
       "/sip/",
       "/pps/",
-      "/w00tw00t.at.isc.sans.dfind:)"
+      "/w00tw00t.at.isc.sans.dfind:)",
+      "/blog/"
     ]
   },
   "path": {

@@ -50,6 +50,8 @@ class Yourip extends Component {
 
   events () {
     this.element.onclick = () => {
+      this.element.style.boxShadow = '0px 0px 10px rgba(255, 127, 80, 1)';
+      setTimeout(() => this.element.style.boxShadow = '0px 0px 10px rgba(0, 0, 0, 0.1)', 200);
       const selection = window.getSelection();
       const range = document.createRange();
 

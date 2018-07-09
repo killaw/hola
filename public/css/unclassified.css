@@ -6,6 +6,8 @@
   background-color: white;
   /* padding: 30px; */
   box-sizing: border-box;
+  transition-property: box-shadow;
+  transition-duration: .2s;
 }
 
 .box:hover {

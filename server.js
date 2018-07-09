@@ -4,12 +4,18 @@ const normalizeRequest = require('./normalize-request'),
       config = require('config'),
       del = require('./delete'),
       post = require('./post'),
+      https = require('https'),
       http = require('http'),
       get = require('./get'),
       url = require('url'),
       fs = require('fs');
 
-module.exports = http.createServer(function(req, res) {
+let httpsOptions = {
+  cert: fs.readFileSync(config.get('app:cert')),
+  key: fs.readFileSync(config.get('app:key'))
+};
+
+module.exports = https.createServer(httpsOptions, function(req, res) {
   for (let pattern of config.get('misc:hackers'))
     if (~req.url.toLowerCase().indexOf(pattern)) {
       fs.appendFile(config.get('path:log'), `${(new Date).toLocaleString()} Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}\r\n`, (err) => err);

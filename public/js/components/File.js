@@ -43,6 +43,8 @@ class File extends Component {
 
   events () {
     this.element.onclick = () => {
+      this.element.style.boxShadow = '0px 0px 10px rgba(62, 181, 252, 1)';
+      setTimeout(() => this.element.style.boxShadow = '0px 0px 10px rgba(0, 0, 0, 0.1)', 1000);
       window.location = this.state.href;
     };
   }
