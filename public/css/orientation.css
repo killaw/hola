@@ -1,0 +1,142 @@
+/*
+ * NOTE: этот способ антогонист horizontal. Т.е. размещает элементы друг под другом.
+ * способ вертикального центрирования. Потомку назначается класс inline-block
+ * (может потребоваться оберточный div, чтобы например не убирать flex у
+ * оригинального). В родителе при этом создается соседний псевдоэлемент, который
+ * занимает всю высоту. Таким образом начинает работать свойство vertical-align.
+ * Само свойство выравнивает не элемент относительно контейнера, а элементы
+ * внутри контейнера, относительно друг друга.
+ */
+div.center-vertically > *,
+form.center-vertically > * {
+  display:inline-block;
+  vertical-align:middle;
+  width: 100%;
+}
+div.center-vertically::after,
+form.center-vertically::after {
+  content: "";
+    display:inline-block;
+    vertical-align:middle;
+    height:100%;
+    width:0px;
+}
+/* end */
+
+div.vertical,
+form.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * убирает отступы у первого и последнего дочернего элемента любого div'а
+ */
+div.vertical > *,
+form.vertical > * {
+  margin-top: 1rem;
+}
+form label {
+  display: inline-block;
+}
+
+div.vertical > :first-child,
+form.vertical > :first-child {
+  margin-top: 0;
+}
+
+div.vertical > :last-child,
+form.vertical > :last-child {
+  margin-bottom: 0;
+}
+
+/*
+ * при назначении childs-to-hcenter родителю, прямые дочерние элементы переводятся
+ * в режим инлайн блоков, что позволяет родителю выстаивать их по центру как текст
+ * при этом text-align: left, применяемый к дочерним элементам отменяет наследование
+ * центрирования в их внутренности. Но следует учитывать, что дочерние элементы
+ * будут друг под другом, только если по ширине они не могут поместиться рядом.
+ * Другой вариант - это центрировать block элементы с помощью margin-left: auto и
+ * margin-right: auto, но для этого у элемента должны быть ширина. Плюс возникает
+ * проблема с вложенностью элементов (когда ширина не у прямого потомка контейнера,
+ * а у вложенного далее, и в общем-то не ясно как определять кому назначить свойства
+ * и когда останавливать наследование)
+ */
+div.vertical.childs-to-hcenter {
+  text-align: center;
+}
+div.vertical.childs-to-hcenter > * {
+  display: inline-block;
+  text-align: left;
+}
+
+/*end*/
+
+/*
+ * данный класс, назначаемый какому-нибудь дочернему элементу (подойдет только
+ * для текстовых), разместит текст элемента по середине, а область займет всю строку,
+ * что позволит разместить даже короткие inline блоки друг под другом, даже если
+ * родительский элемент широкий и позволяет разместить дочерние в одну строку
+ */
+div.vertical > .occupy-row,
+form.vertical > .occupy-row {
+  width: 100%;
+  text-align: center;
+}
+/*end*/
+
+/*
+ * класс для родительского элемента. Размещает дочерние элементы по горизонтали
+ * с правильными отступами.
+ */
+div.horizontal {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+/*
+ * добавить родителю с классом horizontal класс flex-grow-zero, чтобы дочерние
+ * элементы вели себя как inline-block в отношении ширины
+ */
+div.horizontal.flex-grow-zero > * {
+  flex-grow: 0;
+}
+
+/*
+ * чтобы прижать дочерние элементы флекса к правой стороне
+ */
+div.horizontal.childs-to-right {
+  justify-content: flex-end;
+}
+div.horizontal.childs-to-right > * {
+  flex-grow: 0;
+}
+
+
+/*
+ * чтобы распределить элементы по контейнеру от левого до правого края
+ */
+div.horizontal.space-between {
+  justify-content: space-between;
+}
+div.horizontal.space-between > * {
+  flex-grow: 0;
+}
+
+div.horizontal.childs-to-vcenter {
+  align-items: center;
+}
+
+div.horizontal > * {
+  margin: 0 .5em;
+  flex-grow: 1;
+}
+
+div.horizontal > :first-child {
+  margin-left: 0;
+}
+div.horizontal > :last-child {
+  margin-right: 0;
+}
+/* end */

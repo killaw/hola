@@ -1,33 +1,3 @@
-/**
- ЗАДАЧА - научиться работать с потоками (streams)
- Написать HTTP-сервер для загрузки и получения файлов
- - Все файлы находятся в директории files
- - Структура файлов НЕ вложенная.
-
- - Виды запросов к серверу
-   GET /file.ext
-   - выдаёт файл file.ext из директории files,
-
-   POST /file.ext
-   - пишет всё тело запроса в файл files/file.ext и выдаёт ОК
-   - если файл уже есть, то выдаёт ошибку 409
-   - при превышении файлом размера 1MB выдаёт ошибку 413
-
-   DELETE /file
-   - удаляет файл
-   - выводит 200 OK
-   - если файла нет, то ошибка 404
-
- Вместо file может быть любое имя файла.
- Так как поддиректорий нет, то при наличии / или .. в пути сервер должен выдавать ошибку 400.
-
-- Сервер должен корректно обрабатывать ошибки "файл не найден" и другие (ошибка чтения файла)
-- index.html или curl для тестирования
-
- */
-
-// Пример простого сервера в качестве основы
-
 'use strict';
 
 const normalizeRequest = require('./normalize-request'),
@@ -51,6 +21,13 @@ module.exports = http.createServer(function(req, res) {
 
   switch(req.method) {
     case 'GET':
+      if (req.url === '/myip') {
+        res.statusCode = 200;
+        res.end(JSON.stringify({ ip: req.connection.remoteAddress.replace(/^.+:/, '') }));
+
+        return;
+      }
+
       normalizeRequest(
         url.parse(req.url).pathname,
         res,
