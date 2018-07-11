@@ -5,7 +5,6 @@ const normalizeRequest = require('./normalize-request'),
       del = require('./delete'),
       post = require('./post'),
       https = require('https'),
-      http = require('http'),
       get = require('./get'),
       url = require('url'),
       fs = require('fs');

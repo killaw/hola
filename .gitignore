@@ -1,6 +1,8 @@
 files
 test
 *.pem
+dev-config.json
+
 # Logs
 logs
 *.log
