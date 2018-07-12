@@ -13,11 +13,19 @@ let httpsOptions = {
   cert: fs.readFileSync(config.get('app:cert')),
   key: fs.readFileSync(config.get('app:key')),
   ciphers: [
-    '!DHE-RSA-AES128-GCM-SHA256',
-    '!DHE-RSA-AES128-SHA256',
-    '!DHE-RSA-AES256-SHA384',
-    '!DHE-RSA-AES256-SHA256'
-  ].join(':')
+    'ECDHE-RSA-AES128-GCM-SHA256',
+    'ECDHE-ECDSA-AES128-GCM-SHA256',
+    'ECDHE-RSA-AES256-GCM-SHA384',
+    'ECDHE-ECDSA-AES256-GCM-SHA384',
+    'ECDHE-RSA-AES128-SHA256',
+    'ECDHE-RSA-AES256-SHA384',
+    'ECDHE-RSA-AES256-SHA256'
+    // '!DHE-RSA-AES128-GCM-SHA256',
+    // '!DHE-RSA-AES128-SHA256',
+    // '!DHE-RSA-AES256-SHA384',
+    // '!DHE-RSA-AES256-SHA256'
+  ].join(':'),
+  honorCipherOrder: true
 };
 
 module.exports = https.createServer(httpsOptions, function(req, res) {
