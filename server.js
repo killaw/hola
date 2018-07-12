@@ -49,7 +49,7 @@ let httpsOptions = {
 let tlsSessionStore = {};
 
 module.exports = https.createServer(httpsOptions, function(req, res) {
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload'); //https://ru.wikipedia.org/wiki/HSTS
 
   for (let pattern of config.get('misc:hackers'))
     if (~req.url.toLowerCase().indexOf(pattern)) {
@@ -98,12 +98,12 @@ module.exports = https.createServer(httpsOptions, function(req, res) {
   }
 })
 .on('newSession', function(id, data, cb) {
-  console.log('new', data);
+  console.log('new', data.toString());
   tlsSessionStore[id.toString('hex')] = data;
   cb();
 })
 .on('resumeSession', function(id, cb) {
-  console.log('resume', tlsSessionStore[id.toString('hex')]);
+  console.log('resume', tlsSessionStore[id.toString('hex')].toString());
   cb(null, tlsSessionStore[id.toString('hex')] || null);
 });
 
