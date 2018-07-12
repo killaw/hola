@@ -17,8 +17,7 @@ let httpsOptions = {
     '!DHE-RSA-AES128-SHA256',
     '!DHE-RSA-AES256-SHA384',
     '!DHE-RSA-AES256-SHA256'
-  ].join(':'),
-  honorCipherOrder: true
+  ].join(':')
 };
 
 module.exports = https.createServer(httpsOptions, function(req, res) {
