@@ -46,9 +46,11 @@ let httpsOptions = {
   honorCipherOrder: true
 };
 
+let tlsSessionStore = {};
+
 module.exports = https.createServer(httpsOptions, function(req, res) {
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-  
+
   for (let pattern of config.get('misc:hackers'))
     if (~req.url.toLowerCase().indexOf(pattern)) {
       fs.appendFile(config.get('path:log'), `${(new Date).toLocaleString()} Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}\r\n`, (err) => err);
@@ -94,6 +96,15 @@ module.exports = https.createServer(httpsOptions, function(req, res) {
       res.statusCode = 502;
       res.end('Not implemented');
   }
+})
+.on('newSession', function(id, data, cb) {
+  console.log('new', data);
+  tlsSessionStore[id.toString('hex')] = data;
+  cb();
+})
+.on('resumeSession', function(id, cb) {
+  console.log('resume', tlsSessionStore[id.toString('hex')]);
+  cb(null, tlsSessionStore[id.toString('hex')] || null);
 });
 
 /*
