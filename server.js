@@ -46,7 +46,7 @@ let httpsOptions = {
   honorCipherOrder: true
 };
 
-let tlsSessionStore = {};
+// let tlsSessionStore = {};
 
 module.exports = https.createServer(httpsOptions, function(req, res) {
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload'); //https://ru.wikipedia.org/wiki/HSTS
@@ -96,17 +96,18 @@ module.exports = https.createServer(httpsOptions, function(req, res) {
       res.statusCode = 502;
       res.end('Not implemented');
   }
-})
+});
+/*
+https://github.com/nodejs/node/issues/3132
+https://strongloop.com/strongblog/improve-the-performance-of-the-node-js-https-server/
 .on('newSession', function(id, data, cb) {
-  console.log('new', data.toString());
   tlsSessionStore[id.toString('hex')] = data;
   cb();
 })
 .on('resumeSession', function(id, cb) {
-  console.log('resume', tlsSessionStore[id.toString('hex')].toString());
   cb(null, tlsSessionStore[id.toString('hex')] || null);
 });
-
+*/
 /*
   res.on('error')
   как бы никакие проблемы сетевого соединения не вызовут error
