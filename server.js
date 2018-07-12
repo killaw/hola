@@ -47,6 +47,8 @@ let httpsOptions = {
 };
 
 module.exports = https.createServer(httpsOptions, function(req, res) {
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  
   for (let pattern of config.get('misc:hackers'))
     if (~req.url.toLowerCase().indexOf(pattern)) {
       fs.appendFile(config.get('path:log'), `${(new Date).toLocaleString()} Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}\r\n`, (err) => err);
