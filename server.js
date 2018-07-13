@@ -12,7 +12,19 @@ const normalizeRequest = require('./normalize-request'),
 let httpsOptions = {
   cert: fs.readFileSync(config.get('app:cert')),
   key: fs.readFileSync(config.get('app:key')),
+  /*
+    To use Perfect Forward Secrecy using DHE with the tls module,
+    it is required to generate Diffie-Hellman parameters and specify them with
+    the dhparam option to tls.createSecureContext(). The following illustrates
+    the use of the OpenSSL command-line interface to generate such parameters:
+      openssl dhparam -outform PEM -out dhparam.pem 2048
+    If using Perfect Forward Secrecy using ECDHE, Diffie-Hellman parameters are not required
+    and a default ECDHE curve will be used. The ecdhCurve property can be used
+    when creating a TLS Server to specify the list of names of supported curves to use
+  */
+  dhparam: fs.readFileSync(config.get('app:dhparam')),
   ciphers: [
+    // DHE-RSA-AES128-SHA1 is a cipher spec that uses Diffie-Hellman to generate the key, RSA for authentication, AES-128 for encryption, and SHA1 for digests
     'ECDHE-RSA-AES128-GCM-SHA256',
     'ECDHE-ECDSA-AES128-GCM-SHA256',
     'ECDHE-RSA-AES256-GCM-SHA384',
@@ -53,7 +65,7 @@ module.exports = https.createServer(httpsOptions, function(req, res) {
 
   for (let pattern of config.get('misc:hackers'))
     if (~req.url.toLowerCase().indexOf(pattern)) {
-      fs.appendFile(config.get('path:log'), `${(new Date).toLocaleString()} Client with ip address ${req.connection.remoteAddress} requested strange url: ${req.url}\r\n`, (err) => err);
+      fs.appendFile(config.get('path:log'), `${(new Date).toLocaleString()} Client with ip address ${req.connection.remoteAddress} requested suspicious url: ${req.url}\r\n`, (err) => err);
       res.statusCode = 404;
       res.end('File not found');
 

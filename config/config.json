@@ -2,7 +2,8 @@
   "app": {
     "port": 8443,
     "key": "/etc/letsencrypt/mycert/privkey.pem",
-    "cert": "/etc/letsencrypt/mycert/fullchain.pem"
+    "cert": "/etc/letsencrypt/mycert/fullchain.pem",
+    "dhparam": "/etc/letsencrypt/mycert/dhparam.pem"
   },
   "misc": {
     "hackers": [
@@ -92,8 +93,7 @@
       "/voip/",
       "/sip/",
       "/pps/",
-      "/w00tw00t.at.isc.sans.dfind:)",
-      "/blog/"
+      "/w00tw00t.at.isc.sans.dfind:)"
     ]
   },
   "path": {
