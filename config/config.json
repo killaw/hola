@@ -1,6 +1,6 @@
 {
   "app": {
-    "port": 443,
+    "port": 8443,
     "key": "/etc/letsencrypt/mycert/privkey.pem",
     "cert": "/etc/letsencrypt/mycert/fullchain.pem"
   },
